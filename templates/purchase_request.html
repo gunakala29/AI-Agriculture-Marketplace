@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Purchase Request - AgriMarket</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .request-page {
+            min-height: 75vh;
+            padding: 40px 20px;
+            background: #f4f8f2;
+        }
+
+        .request-container {
+            max-width: 900px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 25px;
+        }
+
+        .product-summary,
+        .request-card {
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .product-summary h1 {
+            color: #183d1b;
+            margin-top: 0;
+        }
+
+        .product-price {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2e7d32;
+            margin: 15px 0;
+        }
+
+        .product-info {
+            margin: 15px 0;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .request-card h2 {
+            margin-top: 0;
+            color: #183d1b;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            border: 1px solid #d5d5d5;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.12);
+        }
+
+        .required {
+            color: #d32f2f;
+        }
+
+        .submit-button {
+            width: 100%;
+            border: none;
+            background: #2e7d32;
+            color: white;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background: #1b5e20;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .note {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f1f8e9;
+            border-radius: 8px;
+            color: #49634a;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 750px) {
+            .request-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .request-page {
+                padding: 25px 15px;
+            }
+
+            .product-summary,
+            .request-card {
+                padding: 22px 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="main-nav">
+
+    <div class="nav-container">
+
+        <div class="logo">
+            🌾 AgriMarket
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="/crop-assistance">
+                🤖 AI Assistance
+            </a>
+
+            <a href="/login">
+                Farmer Login
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<section class="request-page">
+
+    <div style="max-width: 900px; margin: auto;">
+
+        <a href="/product/{{ product['id'] }}"
+           class="back-link">
+            ← Back to Product
+        </a>
+
+        <div class="request-container">
+
+            <!-- PRODUCT SUMMARY -->
+
+            <div class="product-summary">
+
+                <h1>
+                    🛒 Purchase Request
+                </h1>
+
+                <h2>
+                    {{ product["name"] }}
+                </h2>
+
+                <div class="product-price">
+                    ₹{{ product["price"] }}
+                </div>
+
+                <div class="product-info">
+
+                    📦
+                    <strong>Available Quantity:</strong>
+                    {{ product["quantity"] }}
+
+                    <br>
+
+                    📍
+                    <strong>Location:</strong>
+                    {{ product["location"] }}
+
+                    <br>
+
+                    👨‍🌾
+                    <strong>Farmer:</strong>
+                    {{ product["farmer_name"] }}
+
+                </div>
+
+                <div class="note">
+
+                    💡 Submit your purchase request with
+                    your contact details and delivery address.
+                    The farmer can then contact you to confirm
+                    the order and arrange delivery or pickup.
+
+                </div>
+
+            </div>
+
+
+            <!-- BUYER FORM -->
+
+            <div class="request-card">
+
+                <h2>
+                    Buyer Details
+                </h2>
+
+                <form
+                    action="/submit-purchase-request/{{ product['id'] }}"
+                    method="POST"
+                >
+
+                    <div class="form-group">
+
+                        <label for="buyer_name">
+                            Your Name
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="buyer_name"
+                            name="buyer_name"
+                            placeholder="Enter your full name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="buyer_email">
+                            Email Address
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="email"
+                            id="buyer_email"
+                            name="buyer_email"
+                            placeholder="Enter your email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="buyer_phone">
+                            Phone Number
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="buyer_phone"
+                            name="buyer_phone"
+                            placeholder="Enter 10-digit phone number"
+                            pattern="[0-9]{10}"
+                            maxlength="10"
+                            inputmode="numeric"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="quantity">
+                            Required Quantity
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="quantity"
+                            name="quantity"
+                            placeholder="Example: 20 kg"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="delivery_address">
+                            Delivery Address
+                            <span class="required">*</span>
+                        </label>
+
+                        <textarea
+                            id="delivery_address"
+                            name="delivery_address"
+                            placeholder="Enter the address where you want the product delivered"
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="message">
+                            Message to Farmer
+                        </label>
+
+                        <textarea
+                            id="message"
+                            name="message"
+                            placeholder="Example: Please contact me before delivery."
+                        ></textarea>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="submit-button"
+                    >
+                        🛒 Send Purchase Request
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer class="footer">
+
+    <p>🌾 AgriMarket</p>
+
+    <p>
+        AI-Powered Agriculture Marketplace
+    </p>
+
+    <p>
+        © 2026 AgriMarket. All Rights Reserved.
+    </p>
+
+</footer>
+
+</body>
+
+</html>

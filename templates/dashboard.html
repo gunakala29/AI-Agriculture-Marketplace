@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Farmer Dashboard - AgriMarket</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .dashboard-page {
+            min-height: 75vh;
+            padding: 40px 20px;
+            background: #f4f8f2;
+        }
+
+        .dashboard-container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .welcome-card {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+        }
+
+        .welcome-card h1 {
+            margin: 0 0 8px;
+            color: #183d1b;
+        }
+
+        .welcome-card p {
+            color: #666;
+            margin: 0;
+        }
+
+        .section-card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+        }
+
+        .section-title {
+            margin-top: 0;
+            color: #183d1b;
+            border-bottom: 1px solid #e5e5e5;
+            padding-bottom: 15px;
+        }
+
+        .add-product-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .form-group input {
+            padding: 11px 13px;
+            border: 1px solid #d5d5d5;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .add-button {
+            grid-column: 1 / -1;
+            border: none;
+            background: #2e7d32;
+            color: white;
+            padding: 13px;
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .add-button:hover {
+            background: #1b5e20;
+        }
+
+        /* Product cards */
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .product-item {
+            border: 1px solid #e4e4e4;
+            border-radius: 12px;
+            padding: 18px;
+            background: #fafcfa;
+        }
+
+        .product-item h3 {
+            margin-top: 0;
+            color: #183d1b;
+        }
+
+        .product-item p {
+            color: #555;
+            margin: 8px 0;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .action-button {
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            padding: 9px;
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .edit-button {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .delete-button {
+            border: none;
+            background: #ffebee;
+            color: #c62828;
+            cursor: pointer;
+            font-weight: 600;
+            border-radius: 7px;
+        }
+
+        /* Purchase requests */
+
+        .request-list {
+            display: grid;
+            gap: 18px;
+        }
+
+        .request-card {
+            border: 1px solid #dfe8df;
+            border-left: 5px solid #2e7d32;
+            border-radius: 12px;
+            padding: 20px;
+            background: #fbfdfb;
+        }
+
+        .request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .request-header h3 {
+            margin: 0;
+            color: #183d1b;
+        }
+
+        .status-badge {
+            background: #fff3cd;
+            color: #856404;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .request-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            color: #444;
+        }
+
+        .request-detail {
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .request-detail strong {
+            color: #333;
+        }
+
+        .address-detail {
+            grid-column: 1 / -1;
+        }
+
+        .message-detail {
+            grid-column: 1 / -1;
+        }
+
+        .buyer-contact-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .buyer-contact-button {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .buyer-call {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .buyer-email {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+            background: #fafafa;
+            border-radius: 10px;
+        }
+
+        .request-date {
+            margin-top: 12px;
+            color: #888;
+            font-size: 13px;
+        }
+
+        @media (max-width: 850px) {
+
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .dashboard-page {
+                padding: 25px 15px;
+            }
+
+            .section-card,
+            .welcome-card {
+                padding: 20px 16px;
+            }
+
+            .add-product-form {
+                grid-template-columns: 1fr;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .request-details {
+                grid-template-columns: 1fr;
+            }
+
+            .address-detail,
+            .message-detail {
+                grid-column: auto;
+            }
+
+            .request-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .buyer-contact-buttons {
+                flex-direction: column;
+            }
+
+            .buyer-contact-button {
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVIGATION -->
+
+<nav class="main-nav">
+
+    <div class="nav-container">
+
+        <div class="logo">
+            🌾 AgriMarket
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="/crop-assistance">
+                🤖 AI Assistance
+            </a>
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/logout">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<section class="dashboard-page">
+
+    <div class="dashboard-container">
+
+
+        <!-- WELCOME -->
+
+        <div class="welcome-card">
+
+            <h1>
+                👨‍🌾 Welcome, {{ farmer_name }}
+            </h1>
+
+            <p>
+                Manage your agricultural products and
+                purchase requests from buyers.
+            </p>
+
+        </div>
+
+
+        <!-- ADD PRODUCT -->
+
+        <div class="section-card">
+
+            <h2 class="section-title">
+                ➕ Add New Product
+            </h2>
+
+            <form
+                action="/add-product"
+                method="POST"
+                class="add-product-form"
+            >
+
+                <div class="form-group">
+
+                    <label>
+                        Product Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Example: Mango"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Price
+                    </label>
+
+                    <input
+                        type="number"
+                        name="price"
+                        step="0.01"
+                        placeholder="Example: 100"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Quantity
+                    </label>
+
+                    <input
+                        type="text"
+                        name="quantity"
+                        placeholder="Example: 100 kg"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Location
+                    </label>
+
+                    <input
+                        type="text"
+                        name="location"
+                        placeholder="Example: Eluru"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="add-button"
+                >
+                    ➕ Add Product
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- MY PRODUCTS -->
+
+        <div class="section-card">
+
+            <h2 class="section-title">
+                🌾 My Products
+            </h2>
+
+
+            {% if products %}
+
+                <div class="product-grid">
+
+                    {% for product in products %}
+
+                        <div class="product-item">
+
+                            <h3>
+                                {{ product["name"] }}
+                            </h3>
+
+                            <p>
+                                💰
+                                <strong>₹{{ product["price"] }}</strong>
+                            </p>
+
+                            <p>
+                                📦
+                                {{ product["quantity"] }}
+                            </p>
+
+                            <p>
+                                📍
+                                {{ product["location"] }}
+                            </p>
+
+
+                            <div class="product-actions">
+
+                                <a
+                                    href="/edit-product/{{ product['id'] }}"
+                                    class="action-button edit-button"
+                                >
+                                    ✏️ Edit
+                                </a>
+
+
+                                <form
+                                    action="/delete-product/{{ product['id'] }}"
+                                    method="POST"
+                                    style="flex: 1;"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="action-button delete-button"
+                                        style="width: 100%;"
+                                        onclick="return confirm('Are you sure you want to delete this product?');"
+                                    >
+                                        🗑️ Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-message">
+
+                    You have not added any products yet.
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- PURCHASE REQUESTS -->
+
+        <div class="section-card">
+
+            <h2 class="section-title">
+                🛒 Purchase Requests
+            </h2>
+
+
+            {% if purchase_requests %}
+
+                <div class="request-list">
+
+                    {% for request in purchase_requests %}
+
+                        <div class="request-card">
+
+
+                            <div class="request-header">
+
+                                <h3>
+                                    🌾 {{ request["product_name"] }}
+                                </h3>
+
+                                <span class="status-badge">
+                                    {{ request["status"] }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="request-details">
+
+
+                                <div class="request-detail">
+
+                                    👤
+                                    <strong>Buyer:</strong>
+
+                                    {{ request["buyer_name"] }}
+
+                                </div>
+
+
+                                <div class="request-detail">
+
+                                    📦
+                                    <strong>Quantity:</strong>
+
+                                    {{ request["quantity"] }}
+
+                                </div>
+
+
+                                <div class="request-detail">
+
+                                    📞
+                                    <strong>Phone:</strong>
+
+                                    <a
+                                        href="tel:{{ request['buyer_phone'] }}"
+                                    >
+                                        {{ request["buyer_phone"] }}
+                                    </a>
+
+                                </div>
+
+
+                                <div class="request-detail">
+
+                                    ✉️
+                                    <strong>Email:</strong>
+
+                                    <a
+                                        href="mailto:{{ request['buyer_email'] }}"
+                                    >
+                                        {{ request["buyer_email"] }}
+                                    </a>
+
+                                </div>
+
+
+                                <div class="request-detail address-detail">
+
+                                    📍
+                                    <strong>Delivery Address:</strong>
+
+                                    <br>
+
+                                    {{ request["delivery_address"] }}
+
+                                </div>
+
+
+                                {% if request["message"] %}
+
+                                    <div class="request-detail message-detail">
+
+                                        💬
+                                        <strong>Message:</strong>
+
+                                        <br>
+
+                                        {{ request["message"] }}
+
+                                    </div>
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                            <div class="buyer-contact-buttons">
+
+                                <a
+                                    href="tel:{{ request['buyer_phone'] }}"
+                                    class="buyer-contact-button buyer-call"
+                                >
+                                    📞 Call Buyer
+                                </a>
+
+
+                                <a
+                                    href="mailto:{{ request['buyer_email'] }}"
+                                    class="buyer-contact-button buyer-email"
+                                >
+                                    ✉️ Email Buyer
+                                </a>
+
+                            </div>
+
+
+                            <div class="request-date">
+
+                                🕒 Request received:
+                                {{ request["created_at"] }}
+
+                            </div>
+
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-message">
+
+                    📭 No purchase requests yet.
+
+                    <br><br>
+
+                    When a buyer sends a purchase request
+                    for one of your products, it will appear here.
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+    <p>
+        🌾 AgriMarket
+    </p>
+
+    <p>
+        AI-Powered Agriculture Marketplace
+    </p>
+
+    <p>
+        © 2026 AgriMarket. All Rights Reserved.
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>

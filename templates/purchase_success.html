@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Request Sent - AgriMarket</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .success-page {
+            min-height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: #f4f8f2;
+        }
+
+        .success-card {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            padding: 45px 35px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .success-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .success-card h1 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .success-card p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .product-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #183d1b;
+            margin: 20px 0;
+        }
+
+        .info-box {
+            background: #f1f8e9;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            color: #49634a;
+            line-height: 1.6;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .success-button {
+            display: inline-block;
+            padding: 12px 22px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .home-button {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .product-button {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        @media (max-width: 550px) {
+            .success-page {
+                padding: 25px 15px;
+            }
+
+            .success-card {
+                padding: 35px 20px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .success-button {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="main-nav">
+
+    <div class="nav-container">
+
+        <div class="logo">
+            🌾 AgriMarket
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="/crop-assistance">
+                🤖 AI Assistance
+            </a>
+
+            <a href="/login">
+                Farmer Login
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<section class="success-page">
+
+    <div class="success-card">
+
+        <div class="success-icon">
+            ✅
+        </div>
+
+        <h1>
+            Purchase Request Sent!
+        </h1>
+
+        <p>
+            Your purchase request has been successfully
+            sent to the farmer.
+        </p>
+
+        <div class="product-name">
+            🌾 {{ product["name"] }}
+        </div>
+
+        <div class="info-box">
+
+            👨‍🌾 The farmer can now view your request
+            from their dashboard.
+
+            <br><br>
+
+            📞 The farmer can contact you using the
+            phone number you provided.
+
+            <br><br>
+
+            📦 You can discuss payment, delivery,
+            or pickup directly with the farmer.
+
+        </div>
+
+        <div class="button-group">
+
+            <a href="/"
+               class="success-button home-button">
+                🏠 Back to Marketplace
+            </a>
+
+            <a href="/product/{{ product['id'] }}"
+               class="success-button product-button">
+                ← View Product
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer class="footer">
+
+    <p>🌾 AgriMarket</p>
+
+    <p>
+        AI-Powered Agriculture Marketplace
+    </p>
+
+    <p>
+        © 2026 AgriMarket. All Rights Reserved.
+    </p>
+
+</footer>
+
+</body>
+
+</html>

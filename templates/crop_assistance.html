@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Crop Assistance</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <h1>🌾 AI Crop Assistance</h1>
+    <p>Get a crop recommendation based on environmental conditions</p>
+</header>
+
+<main>
+
+    <section>
+        <h2>🤖 Crop Recommendation</h2>
+
+        <form action="/predict" method="POST">
+
+            <label>Temperature (°C)</label>
+            <input
+                type="number"
+                step="0.1"
+                name="temperature"
+                placeholder="Example: 25"
+                required
+            >
+
+            <label>Humidity (%)</label>
+            <input
+                type="number"
+                step="0.1"
+                name="humidity"
+                placeholder="Example: 70"
+                required
+            >
+
+            <label>Rainfall (mm)</label>
+            <input
+                type="number"
+                step="0.1"
+                name="rainfall"
+                placeholder="Example: 150"
+                required
+            >
+
+            <button type="submit">
+                🌱 Recommend Crop
+            </button>
+
+        </form>
+
+        {% if prediction %}
+
+        <div class="success">
+            <h3>🌾 Recommended Crop</h3>
+            <p>
+                Based on the given conditions, the recommended crop is:
+            </p>
+
+            <h2>{{ prediction }}</h2>
+        </div>
+
+        {% endif %}
+
+    </section>
+
+</main>
+
+<footer>
+    <p>AI Agriculture Marketplace</p>
+    <p>Helping Farmers Make Better Decisions 🌱</p>
+</footer>
+
+</body>
+</html>

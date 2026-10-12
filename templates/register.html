@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Farmer Registration - AgriMarket</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .register-page {
+            min-height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: #f4f8f2;
+        }
+
+        .register-card {
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .register-card h1 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            color: #183d1b;
+            text-align: center;
+        }
+
+        .register-card .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px 14px;
+            border: 1px solid #d5d5d5;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.12);
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        .register-button {
+            width: 100%;
+            border: none;
+            background: #2e7d32;
+            color: white;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .register-button:hover {
+            background: #1b5e20;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #2e7d32;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        @media (max-width: 500px) {
+
+            .register-page {
+                padding: 25px 15px;
+            }
+
+            .register-card {
+                padding: 25px 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVIGATION -->
+
+<nav class="main-nav">
+
+    <div class="nav-container">
+
+        <div class="logo">
+            🌾 AgriMarket
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="/crop-assistance">
+                🤖 AI Assistance
+            </a>
+
+            <a href="/login">
+                Farmer Login
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- REGISTRATION -->
+
+<section class="register-page">
+
+    <div class="register-card">
+
+        <h1>
+            👨‍🌾 Farmer Registration
+        </h1>
+
+        <p class="subtitle">
+            Create your farmer account
+        </p>
+
+
+        {% if error %}
+
+            <div class="error-message">
+                {{ error }}
+            </div>
+
+        {% endif %}
+
+
+        <form
+            action="/register"
+            method="POST"
+        >
+
+
+            <!-- NAME -->
+
+            <div class="form-group">
+
+                <label for="name">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your full name"
+                    required
+                >
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+            </div>
+
+
+            <!-- PHONE -->
+
+            <div class="form-group">
+
+                <label for="phone">
+                    Phone Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Enter 10-digit phone number"
+                    pattern="[0-9]{10}"
+                    maxlength="10"
+                    inputmode="numeric"
+                    required
+                >
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Create a password"
+                    required
+                >
+
+            </div>
+
+
+            <!-- REGISTER -->
+
+            <button
+                type="submit"
+                class="register-button"
+            >
+                Create Farmer Account
+            </button>
+
+
+        </form>
+
+
+        <div class="login-link">
+
+            Already have an account?
+
+            <a href="/login">
+                Login here
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+    <p>🌾 AgriMarket</p>
+
+    <p>
+        AI-Powered Agriculture Marketplace
+    </p>
+
+    <p>
+        © 2026 AgriMarket. All Rights Reserved.
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>

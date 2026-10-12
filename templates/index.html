@@ -1,0 +1,558 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AgriMarket - Agriculture Marketplace</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
+<nav class="main-nav">
+
+    <div class="nav-container">
+
+        <div class="logo">
+
+            🌾 AgriMarket
+
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="/">Home</a>
+
+            <a href="/crop-assistance">
+                🤖 AI Assistance
+            </a>
+
+            {% if session.get("farmer_id") %}
+
+                <a href="/dashboard">
+                    Dashboard
+                </a>
+
+                <a href="/logout">
+                    Logout
+                </a>
+
+            {% else %}
+
+                <a href="/login">
+                    Farmer Login
+                </a>
+
+                <a href="/register">
+                    Register
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     WELCOME SECTION
+===================================================== -->
+
+<section class="welcome-section">
+
+    <div class="welcome-content">
+
+        <h1>
+            Welcome to AgriMarket 🌾
+        </h1>
+
+        <p>
+            A smart agriculture marketplace connecting
+            farmers and buyers.
+        </p>
+
+
+        <div class="welcome-buttons">
+
+            {% if session.get("farmer_id") %}
+
+                <a href="/dashboard"
+                   class="primary-button">
+
+                    Go to Farmer Dashboard
+
+                </a>
+
+            {% else %}
+
+                <a href="/login"
+                   class="primary-button">
+
+                    Farmer Login
+
+                </a>
+
+
+                <a href="/register"
+                   class="secondary-button">
+
+                    Create Farmer Account
+
+                </a>
+
+            {% endif %}
+
+
+            <a href="/crop-assistance"
+               class="ai-button">
+
+                🤖 AI Crop Assistance
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     MARKETPLACE
+===================================================== -->
+
+<section class="products-section">
+
+    <div class="section-container">
+
+        <h2>
+            🛒 Agriculture Marketplace
+        </h2>
+
+        <p class="section-description">
+
+            Browse agricultural products listed
+            by farmers.
+
+        </p>
+
+
+
+        <!-- =================================================
+             SEARCH AND FILTER
+        ================================================= -->
+
+        <div class="marketplace-search">
+
+            <form method="GET"
+                  action="/">
+
+                <div class="search-row">
+
+
+                    <!-- SEARCH -->
+
+                    <div class="search-field">
+
+                        <label>
+                            Search Product
+                        </label>
+
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="Search rice, wheat, mango..."
+                            value="{{ search }}"
+                        >
+
+                    </div>
+
+
+
+                    <!-- LOCATION -->
+
+                    <div class="search-field">
+
+                        <label>
+                            Location
+                        </label>
+
+                        <select name="location">
+
+                            <option value="">
+                                All Locations
+                            </option>
+
+
+                            {% for item in locations %}
+
+                                <option
+                                    value="{{ item['location'] }}"
+                                    {% if selected_location == item['location'] %}
+                                    selected
+                                    {% endif %}
+                                >
+
+                                    {{ item['location'] }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- BUTTON -->
+
+                    <div class="search-button-container">
+
+                        <button
+                            type="submit"
+                            class="search-button">
+
+                            🔍 Search
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PRODUCT LIST
+        ================================================= -->
+
+        {% if products %}
+
+            <div class="products-grid">
+
+
+                {% for product in products %}
+
+                    <div class="product-card">
+
+
+                        <!-- PRODUCT ICON -->
+
+                        <div class="product-icon">
+
+                            {% if "rice" in product["name"].lower() %}
+
+                                🌾
+
+                            {% elif "wheat" in product["name"].lower() %}
+
+                                🌾
+
+                            {% elif "maize" in product["name"].lower() %}
+
+                                🌽
+
+                            {% elif "corn" in product["name"].lower() %}
+
+                                🌽
+
+                            {% elif "tomato" in product["name"].lower() %}
+
+                                🍅
+
+                            {% elif "mango" in product["name"].lower() %}
+
+                                🥭
+
+                            {% elif "potato" in product["name"].lower() %}
+
+                                🥔
+
+                            {% elif "onion" in product["name"].lower() %}
+
+                                🧅
+
+                            {% elif "banana" in product["name"].lower() %}
+
+                                🍌
+
+                            {% else %}
+
+                                🌱
+
+                            {% endif %}
+
+                        </div>
+
+
+
+                        <!-- PRODUCT DETAILS -->
+
+                        <div class="product-details">
+
+                            <h3>
+                                {{ product["name"] }}
+                            </h3>
+
+
+                            <p class="product-price">
+
+                                ₹{{ product["price"] }}
+
+                            </p>
+
+
+                            <p>
+
+                                📦 Quantity:
+                                {{ product["quantity"] }}
+
+                            </p>
+
+
+                            <p>
+
+                                📍 Location:
+                                {{ product["location"] }}
+
+                            </p>
+
+
+                            <p>
+
+                                👨‍🌾 Farmer:
+                                {{ product["farmer_name"] }}
+
+                            </p>
+
+
+                            <a
+                                href="/product/{{ product['id'] }}"
+                                class="view-product-button">
+
+                                View Product
+
+                            </a>
+
+                        </div>
+
+
+                    </div>
+
+                {% endfor %}
+
+
+            </div>
+
+
+        {% else %}
+
+
+            <!-- NO PRODUCTS -->
+
+            <div class="empty-products">
+
+                <div class="empty-icon">
+                    🌱
+                </div>
+
+                <h3>
+                    No Products Found
+                </h3>
+
+                <p>
+                    Try another product name or location.
+                </p>
+
+            </div>
+
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     AI CROP ASSISTANCE
+===================================================== -->
+
+<section class="ai-section">
+
+    <div class="section-container">
+
+        <h2>
+            🤖 AI Crop Assistance
+        </h2>
+
+        <p>
+
+            Get a crop recommendation using
+            temperature, humidity and rainfall.
+
+        </p>
+
+
+        <a href="/crop-assistance"
+           class="primary-button">
+
+            Try AI Crop Recommendation
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FEATURES
+===================================================== -->
+
+<section class="features-section">
+
+    <div class="section-container">
+
+        <h2>
+            Platform Features
+        </h2>
+
+
+        <div class="features-grid">
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    👨‍🌾
+                </div>
+
+                <h3>
+                    Farmer Marketplace
+                </h3>
+
+                <p>
+                    Farmers can list and manage
+                    their agricultural products.
+                </p>
+
+            </div>
+
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🛒
+                </div>
+
+                <h3>
+                    Product Discovery
+                </h3>
+
+                <p>
+                    Buyers can search products
+                    by name and location.
+                </p>
+
+            </div>
+
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🤖
+                </div>
+
+                <h3>
+                    AI Crop Assistance
+                </h3>
+
+                <p>
+                    Get AI-based crop recommendations
+                    using environmental conditions.
+                </p>
+
+            </div>
+
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🔐
+                </div>
+
+                <h3>
+                    Secure Farmer Accounts
+                </h3>
+
+                <p>
+                    Farmer accounts and products
+                    are stored securely.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <p>
+        🌾 AgriMarket
+    </p>
+
+    <p>
+        AI-Powered Agriculture Marketplace
+    </p>
+
+    <p>
+        © 2026 AgriMarket. All Rights Reserved.
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ product['name'] }} - Agriculture Marketplace</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f8f3;
+            color: #263528;
+        }
+
+        .navbar {
+            background: #1f6b3a;
+            padding: 15px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            color: white;
+            text-decoration: none;
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 22px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .page-container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 45px auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #1f6b3a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 22px;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 45% 55%;
+            gap: 35px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Product visual */
+
+        .product-visual {
+            min-height: 430px;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #e5f5df, #c9e8bd);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-visual::before {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.35);
+            top: -80px;
+            right: -70px;
+        }
+
+        .product-visual::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            bottom: -80px;
+            left: -60px;
+        }
+
+        .crop-icon {
+            font-size: 145px;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 12px 10px rgba(0, 0, 0, 0.15));
+        }
+
+        .visual-label {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 3;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            color: #1f6b3a;
+        }
+
+        /* Product information */
+
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .category-label {
+            color: #2e8b57;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .product-name {
+            font-size: 42px;
+            margin: 0 0 12px;
+            color: #193b26;
+        }
+
+        .price {
+            font-size: 32px;
+            font-weight: bold;
+            color: #1f7a3f;
+            margin-bottom: 25px;
+        }
+
+        .details-box {
+            background: #f5f9f4;
+            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 11px 0;
+            border-bottom: 1px solid #dce9dc;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #657365;
+            font-weight: bold;
+        }
+
+        .detail-value {
+            color: #263528;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .farmer-box {
+            border: 1px solid #dce9dc;
+            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 22px;
+        }
+
+        .farmer-title {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #1f6b3a;
+        }
+
+        .contact-info {
+            margin: 7px 0;
+            color: #526052;
+            word-break: break-word;
+        }
+
+        /* Buttons */
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 50px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .purchase-button {
+            grid-column: 1 / -1;
+            background: #1f7a3f;
+            color: white;
+            font-size: 17px;
+        }
+
+        .purchase-button:hover {
+            background: #175d30;
+        }
+
+        .call-button {
+            background: #e8f5e9;
+            color: #1f6b3a;
+        }
+
+        .email-button {
+            background: #eef3ff;
+            color: #3454a4;
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding: 25px;
+            text-align: center;
+            background: #1f6b3a;
+            color: white;
+        }
+
+        /* Tablet */
+
+        @media (max-width: 850px) {
+            .product-card {
+                grid-template-columns: 1fr;
+            }
+
+            .product-visual {
+                min-height: 350px;
+            }
+
+            .product-name {
+                font-size: 34px;
+            }
+        }
+
+        /* Mobile */
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 14px 5%;
+                flex-direction: column;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 14px;
+            }
+
+            .page-container {
+                width: 94%;
+                margin: 25px auto;
+            }
+
+            .product-card {
+                padding: 16px;
+                border-radius: 16px;
+                gap: 22px;
+            }
+
+            .product-visual {
+                min-height: 280px;
+            }
+
+            .crop-icon {
+                font-size: 100px;
+            }
+
+            .product-name {
+                font-size: 29px;
+            }
+
+            .price {
+                font-size: 26px;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .purchase-button {
+                grid-column: auto;
+            }
+
+            .detail-row {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .detail-value {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="logo">🌾 AgriMarket</a>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/crop-assistance">AI Assistance</a>
+            <a href="/login">Farmer Login</a>
+        </div>
+    </nav>
+
+    <main class="page-container">
+
+        <a href="/" class="back-link">← Back to Marketplace</a>
+
+        <div class="product-card">
+
+            <!-- Product visual -->
+            <div class="product-visual">
+
+                <div class="crop-icon">
+                    {% if product['name']|lower == 'mango' %}
+                        🥭
+                    {% elif product['name']|lower == 'rice' %}
+                        🌾
+                    {% elif product['name']|lower == 'maize' %}
+                        🌽
+                    {% elif product['name']|lower == 'wheat' %}
+                        🌾
+                    {% elif product['name']|lower == 'tomato' %}
+                        🍅
+                    {% elif product['name']|lower == 'potato' %}
+                        🥔
+                    {% elif product['name']|lower == 'apple' %}
+                        🍎
+                    {% elif product['name']|lower == 'banana' %}
+                        🍌
+                    {% else %}
+                        🌱
+                    {% endif %}
+                </div>
+
+                <div class="visual-label">
+                    Fresh agricultural product
+                </div>
+
+            </div>
+
+            <!-- Product information -->
+            <div class="product-info">
+
+                <div class="category-label">
+                    🌱 Agricultural Product
+                </div>
+
+                <h1 class="product-name">
+                    {{ product['name'] }}
+                </h1>
+
+                <div class="price">
+                    ₹{{ product['price'] }}
+                </div>
+
+                <div class="details-box">
+
+                    <div class="detail-row">
+                        <span class="detail-label">📦 Available Quantity</span>
+                        <span class="detail-value">
+                            {{ product['quantity'] }}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">📍 Location</span>
+                        <span class="detail-value">
+                            {{ product['location'] }}
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="farmer-box">
+
+                    <div class="farmer-title">
+                        👨‍🌾 Farmer Information
+                    </div>
+
+                    <div class="contact-info">
+                        <strong>Farmer:</strong>
+                        {{ product['farmer_name'] }}
+                    </div>
+
+                    {% if product['farmer_phone'] %}
+                    <div class="contact-info">
+                        <strong>Phone:</strong>
+                        {{ product['farmer_phone'] }}
+                    </div>
+                    {% endif %}
+
+                    <div class="contact-info">
+                        <strong>Email:</strong>
+                        {{ product['farmer_email'] }}
+                    </div>
+
+                </div>
+
+                <div class="action-buttons">
+
+                    <a
+                        href="/purchase-request/{{ product['id'] }}"
+                        class="button purchase-button"
+                    >
+                        🛒 Send Purchase Request
+                    </a>
+
+                    {% if product['farmer_phone'] %}
+                    <a
+                        href="tel:{{ product['farmer_phone'] }}"
+                        class="button call-button"
+                    >
+                        📞 Call Farmer
+                    </a>
+                    {% endif %}
+
+                    <a
+                        href="mailto:{{ product['farmer_email'] }}"
+                        class="button email-button"
+                    >
+                        📧 Email Farmer
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        © 2026 AgriMarket — Connecting Farmers and Buyers
+    </footer>
+
+</body>
+</html>

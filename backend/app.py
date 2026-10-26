@@ -634,7 +634,7 @@ def logout():
 
 
 # ---------------------------------------------------------
-# AI CROP ASSISTANCE
+# AI FARMER PRICE ASSISTANT
 # ---------------------------------------------------------
 
 @app.route("/crop-assistance")
@@ -648,41 +648,158 @@ def crop_assistance():
 @app.route("/predict", methods=["POST"])
 def predict():
 
+    product_name = request.form.get(
+        "product_name",
+        ""
+    ).strip()
+
+    quantity = request.form.get(
+        "quantity",
+        ""
+    ).strip()
+
+    location = request.form.get(
+        "location",
+        ""
+    ).strip()
+
+    if not product_name or not quantity or not location:
+
+        return render_template(
+            "crop_assistance.html",
+            error="Please enter product name, quantity and location.",
+            product_name=product_name,
+            quantity=quantity,
+            location=location
+        )
+
     try:
 
-        temperature = float(
-            request.form["temperature"]
-        )
+        quantity_value = float(quantity)
 
-        humidity = float(
-            request.form["humidity"]
-        )
+        if quantity_value <= 0:
 
-        rainfall = float(
-            request.form["rainfall"]
-        )
+            return render_template(
+                "crop_assistance.html",
+                error="Please enter a valid quantity.",
+                product_name=product_name,
+                quantity=quantity,
+                location=location
+            )
 
-        prediction = model.predict([
-            [
-                temperature,
-                humidity,
-                rainfall
-            ]
-        ])[0]
+    except ValueError:
 
         return render_template(
             "crop_assistance.html",
-            prediction=prediction
+            error="Please enter a valid quantity.",
+            product_name=product_name,
+            quantity=quantity,
+            location=location
         )
 
-    except (ValueError, KeyError):
+    connection = get_db_connection()
 
-        return render_template(
-            "crop_assistance.html",
-            error="Please enter valid numbers."
+    # Find existing marketplace prices for the same product
+    products = connection.execute("""
+        SELECT price
+        FROM products
+        WHERE LOWER(name) LIKE ?
+    """, (
+        "%" + product_name.lower() + "%",
+    )).fetchall()
+
+    connection.close()
+
+    # -----------------------------------------------------
+    # CALCULATE MARKET REFERENCE PRICE
+    # -----------------------------------------------------
+
+    if products:
+
+        prices = [
+            float(product["price"])
+            for product in products
+            if product["price"] is not None
+        ]
+
+        if prices:
+
+            market_price = sum(prices) / len(prices)
+
+        else:
+
+            market_price = 0
+
+    else:
+
+        market_price = 0
+
+
+    # -----------------------------------------------------
+    # PRICE RECOMMENDATION
+    # -----------------------------------------------------
+
+    if market_price > 0:
+
+        lower_price = market_price * 0.95
+        higher_price = market_price * 1.10
+
+        estimated_value_low = (
+            lower_price * quantity_value
         )
 
+        estimated_value_high = (
+            higher_price * quantity_value
+        )
 
+        price_available = True
+
+    else:
+
+        lower_price = 0
+        higher_price = 0
+        estimated_value_low = 0
+        estimated_value_high = 0
+
+        price_available = False
+
+
+    return render_template(
+        "crop_assistance.html",
+
+        product_name=product_name,
+
+        quantity=quantity,
+
+        location=location,
+
+        market_price=round(
+            market_price,
+            2
+        ),
+
+        lower_price=round(
+            lower_price,
+            2
+        ),
+
+        higher_price=round(
+            higher_price,
+            2
+        ),
+
+        estimated_value_low=round(
+            estimated_value_low,
+            2
+        ),
+
+        estimated_value_high=round(
+            estimated_value_high,
+            2
+        ),
+
+        price_available=price_available
+    )
 # ---------------------------------------------------------
 # RUN APPLICATION
 # ---------------------------------------------------------
@@ -691,4 +808,4 @@ if __name__ == "__main__":
 
     app.run(
         debug=True
-    )
+    )w

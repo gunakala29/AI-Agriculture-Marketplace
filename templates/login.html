@@ -1,140 +1,120 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Farmer Login</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
-
 </head>
-
 
 <body>
 
-    <header>
+<header class="auth-header">
 
-        <div class="header-content">
+    <div class="auth-header-content">
 
-            <div class="logo">
-                🌾
-            </div>
+        <div class="auth-logo">🌾</div>
 
-            <h1>
-                Farmer Login
-            </h1>
+        <h1>Farmer Login</h1>
 
-            <p>
-                Login to manage your agricultural products
-            </p>
+        <p>Login to manage your agricultural products</p>
+
+    </div>
+
+</header>
+
+
+<main class="auth-main">
+
+    <section class="login-card">
+
+        <div class="login-card-header">
+
+            <div class="login-icon">🔐</div>
+
+            <h2>Welcome Back</h2>
+
+            <p>Login to your farmer account</p>
 
         </div>
 
-    </header>
+
+        {% if error %}
+
+        <div class="login-error">
+            {{ error }}
+        </div>
+
+        {% endif %}
 
 
-    <main>
+        <form action="/login" method="POST" class="login-form">
 
-        <section>
+            <div class="login-form-group">
 
-            <h2 class="section-title">
-                🔐 Login
-            </h2>
+                <label for="email">Email Address</label>
 
-
-            {% if error %}
-
-            <div class="error-message">
-                {{ error }}
-            </div>
-
-            {% endif %}
-
-
-            <form
-                action="/login"
-                method="POST"
-                class="product-form"
-            >
-
-                <div class="form-group">
-
-                    <label for="email">
-                        Email
-                    </label>
-
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="Enter your email"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="password">
-                        Password
-                    </label>
-
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Enter your password"
-                        required
-                    >
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    class="primary-button"
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
                 >
-                    🔐 Login
-                </button>
-
-            </form>
-
-
-            <div class="auth-link">
-
-                Don't have an account?
-
-                <a href="/register">
-                    Register here
-                </a>
 
             </div>
 
-        </section>
 
-    </main>
+            <div class="login-form-group">
+
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+            </div>
 
 
-    <footer>
+            <button type="submit" class="login-submit">
+                🔐 Login
+            </button>
 
-        <h3>
-            🌾 AI-Powered Agriculture Marketplace
-        </h3>
+        </form>
 
-        <p>
-            Empowering Farmers Through Technology
-        </p>
 
-    </footer>
+        <div class="login-register">
+
+            <span>Don't have an account?</span>
+
+            <a href="/register">
+                Register here
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="auth-footer">
+
+    <h3>🌾 AI-Powered Agriculture Marketplace</h3>
+
+    <p>Empowering Farmers Through Technology</p>
+
+</footer>
 
 </body>
 
 </html>
-
